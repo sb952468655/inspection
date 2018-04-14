@@ -1,0 +1,49 @@
+environment time-stamp
+environment no more
+show version
+show router interface exclude-services
+show chassis
+show chassis detail
+show system cpu 
+show system memory 
+show bof	
+tools dump system-resources
+show router status	
+show system information
+show time	
+show card
+show mda
+show card detail
+show mda detail	
+show log log-id 99
+show log log-id 100
+show port
+show port detail
+show lag
+show lag detail 
+show lag des
+show router interface
+show router isis interface
+show router isis adjacency
+show router isis status
+show router isis statistics
+show router isis interface detail	
+show router isis spf-log 
+show router ospf spf
+show router bgp neighbor 
+show router bgp summary
+show router route-table summary
+show router mpls interface 
+show router mpls status
+show router ldp interface 
+show router ldp status
+show router ldp session
+show router ldp peer
+show router ldp discovery
+show service sdp
+show service sdp-using	
+show service service-using
+show boot-messages
+show service id 1000 dhcp lease-state  | count
+show service sap-using
+show router arp	
