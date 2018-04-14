@@ -96,11 +96,20 @@ def warn3(res):
    
     return ('', '')
 
+def warn4(res):
+    re_obj1 = re.compile(r'rxOpticalPower-(low|high)-alarm')
+    result1 = re_obj1.search(res)
+
+    str1 = '高' if result1.group(0) == 'high' else '低'
+
+    return('', '注释：端口%s收光告警,建议检查光路' % str1)
+
 # 故障配置
 g_gz_config = {
     r'XPL Errors': warn3,
     r'full speed': warn1,
     r'Temperature\s+: [6-9][0-9]C': warn2,
+    r'rxOpticalPower-(low|high)-alarm': warn4
 }
 
 g_host = g_tb_config[0][0]
