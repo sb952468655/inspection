@@ -99,10 +99,15 @@ def warn3(res):
 def warn4(res):
     re_obj1 = re.compile(r'rxOpticalPower-(low|high)-alarm')
     result1 = re_obj1.search(res)
+    re_obj2 = re.compile(r'\d{7} \d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}.\d{2} GMT8 MINOR: PORT #\d{4} Base Port \d/\d/\d')
+    result2 = re_obj2.findall(res)
 
     str1 = '高' if result1.group(0) == 'high' else '低'
+    str2 = ''
+    for i in result2:
+        str2 += i + '\n'
 
-    return('', '注释：端口%s收光告警,建议检查光路' % str1)
+    return(str2, '注释：端口%s收光告警,建议检查光路' % str1)
 
 # 故障配置
 g_gz_config = {
