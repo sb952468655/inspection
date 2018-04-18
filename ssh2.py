@@ -91,7 +91,7 @@ def warn3(res):
         if datetime_befor > datetime_15d_ago:
             str1 += item[0] + '\n'
 
-    if result1:
+    if str1:
         return (str1, '注释：XPL(Pchip Qchip) 告警，建议拔插处理，如继续存在，建议更换板卡')
    
     return ('', '')
@@ -99,13 +99,19 @@ def warn3(res):
 def warn4(res):
     re_obj1 = re.compile(r'rxOpticalPower-(low|high)-alarm')
     result1 = re_obj1.search(res)
-    re_obj2 = re.compile(r'\d{7} \d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}.\d{2} GMT8 MINOR: PORT #\d{4} Base Port \d/\d/\d')
+    re_obj2 = re.compile(r'(\d{6} (\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})\.\d{2} GMT8 MINOR: PORT #\d{4} Base Port \d/\d/\d\s+"SFF DDM \(rxOpticalPower-(low|high)-alarm\) \w+")')
     result2 = re_obj2.findall(res)
-
+    
     str1 = '高' if result1.group(0) == 'high' else '低'
     str2 = ''
-    for i in result2:
-        str2 += i + '\n'
+    datetime_15d_ago = datetime.datetime.now() - datetime.timedelta(days=15)
+
+    for item in result2:
+        datetime_befor = datetime.datetime(int(item[1]), int(item[2]), 
+            int(item[3]), int(item[4]), int(item[5]), int(item[6]))
+            
+        if datetime_befor > datetime_15d_ago:
+            str2 += item[0] + '\n'
 
     return(str2, '注释：端口%s收光告警,建议检查光路' % str1)
 
@@ -170,7 +176,7 @@ def check_gz(result):
         if res:
             global g_gz
             info, warn = make(result)
-            if not warn:
+            if not warn or not info:
                 return
             gz_msg = [get_mid(g_prompt).encode('utf-8'), info, warn]
             if not gz_msg in g_gz:
