@@ -55,10 +55,10 @@ def make_report(gz_path):
         set_color(p_warn, (255, 0, 0))
 
     doc.add_heading('总结', 4)
-    doc.add_paragraph('1，为了保障南京电信城域网7750设备正常运行，请定期清理过滤网。',
+    doc.add_paragraph('1，为了保障%s电信城域网7750设备正常运行，请定期清理过滤网。' % city,
         style='report-normal')
-    if '60C' in gz_all:
-        doc.add_paragraph('2，板卡温度高建议清洗防尘网，若清洗之后还没变化或建议更换增强型风扇。',
+    if 'Temperature' in gz_all:
+        doc.add_paragraph('2，板卡温度高建议清洗防尘网。',
             style='report-normal')
     f.close()
     doc.save('%s电信巡检报告-%s.docx' % (city, today))

@@ -51,26 +51,28 @@ def warn2(res):
     result2 = None
     if result_mda:
         re_obj1 = re.compile(r'(\d?\d)?\s{4,5}(\d)\s{5}(.*)\s+up        up')
-        result1 = re_obj1.findall(res)
-        re_obj2 = re.compile(r'Temperature                   : (\d\d)C')
-        result2 = re_obj2.findall(res)
     else:
         re_obj1 = re.compile(r'(\w?\w)?\s{5,6}(.*)\s+up    up')
-        result1 = re_obj1.findall(res)
-        re_obj2 = re.compile(r'Temperature                   : (\d\d)C')
-        result2 = re_obj2.findall(res)
 
+    result1 = re_obj1.findall(res)
+    re_obj2 = re.compile(r'Temperature                   : (\d\d)C')
+    result2 = re_obj2.findall(res)
 
     if not result1 or not result2:
         return ('', '')
 
     dict1 = dict(zip(result2, result1))
     str1 = ''
+
     for key,val in dict1.items():
         if int(key) >= 60:
             if result_mda:
+                if ('imm12' in val[2] or 'imm48' in val[2]) and int(key) < 65:
+                    continue
                 str1 += 'mda %s/%s     %s\nTemperature        : %sC\n' % (val[0], val[1], val[2].strip(), key)
             else:
+                if ('imm12' in val[1] or 'imm48' in val[1]) and int(key) < 65:
+                    continue
                 str1 += 'Card %s     %s\nTemperature        : %sC\n' % (val[0], val[1].strip(), key)
 
     str2 = '板卡温度过高，建议清洗滤网。'
