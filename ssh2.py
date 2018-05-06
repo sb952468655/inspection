@@ -94,7 +94,7 @@ def warn3(res):
             str1 += item[0] + '\n'
 
     if str1:
-        return (str1, '注释：XPL(Pchip Qchip) 告警，建议拔插处理，如继续存在，建议更换板卡')
+        return (str1, '注释：XPL 告警，建议拔插处理，如继续存在，建议更换板卡')
    
     return ('', '')
 
@@ -117,9 +117,30 @@ def warn4(res):
 
     return(str2, '注释：端口%s收光告警,建议检查光路' % str1)
 
+def warn5(res):
+    re_obj1 = re.compile(r'((Q|P)chip Errors Detected\n\s{4}Complex \d \(parity error\): Trap raised \d{1,6} times; Last Trap (\d{2})/(\d{2})/(\d{4}) (\d{2}):(\d{2}):(\d{2}))')
+    result1 = re_obj1.findall(res)
+    
+    str1 = ''
+    warn_type = 'P'
+    datetime_15d_ago = datetime.datetime.now() - datetime.timedelta(days=15)
+    for item in result1:
+        datetime_befor = datetime.datetime(int(item[4]), int(item[2]), 
+            int(item[3]), int(item[5]), int(item[6]), int(item[7]))
+
+        if datetime_befor > datetime_15d_ago:
+            str1 += item[0] + '\n'
+        warn_type = item[1]
+
+    if str1:
+        return (str1, '注释：%schip 告警，建议拔插处理，如继续存在，建议更换板卡' % warn_type)
+   
+    return ('', '')
+
 # 故障配置
 g_gz_config = {
     r'XPL Errors': warn3,
+    r'(P|Q)chip Errors': warn5,
     r'full speed': warn1,
     r'Temperature\s+: [6-9][0-9]C': warn2,
     r'rxOpticalPower-(low|high)-alarm': warn4
