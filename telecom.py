@@ -7,7 +7,6 @@ import os
 import sys
 import json
 import re
-
 # 跳板配置
 g_tb_config = [
     ('202.102.19.253', '9527', 'alang', 'May4th@)!%'), # 电信
@@ -18,6 +17,7 @@ g_tb_config = [
         'telnet 115.168.128.180 /source-interface loopback0',
         'jituan', 'jstelecom1234!@'))
 ]
+
 
 def warn1(res):
 
@@ -136,6 +136,7 @@ def warn5(res):
         return (str1, '注释：%schip 告警，建议拔插处理，如继续存在，建议更换板卡' % warn_type)
    
     return ('', '')
+
 
 # 故障配置
 g_gz_config = {
