@@ -3,6 +3,9 @@ import logging
 import datetime
 from warn import *
 logging.basicConfig(level=logging.INFO)
-a = '''FCS Errors'''
+a = '''Power supply number               : 2
+    Defaulted power supply type     : dc
+    Power supply model              : pem-3
+    Status                          : up'''
 
-print(mobile_warn7(a))
+print(mobile_warn2(a))

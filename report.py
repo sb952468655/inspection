@@ -18,7 +18,7 @@ def add_line(doc, content, font_name, size):
     paragraph = doc.add_paragraph(content)
     font = paragraph.runs[0].font
     set_font(font, font_name, size)
-def make_report(gz_path):
+def make_report_tel(gz_path):
     gz_file = os.path.join(gz_path, 'gz.json')
     city = os.path.basename(gz_path)
     if not os.path.exists(gz_file):
@@ -62,7 +62,48 @@ def make_report(gz_path):
             style='report-normal')
     f.close()
     doc.save('%s电信巡检报告-%s.docx' % (city, today))
-            
+
+def make_report_mob(gz_list):
+    
+    doc = docx.Document('xunjian.docx')
+    area = city + '移动' 
+    doc.add_paragraph(area + '巡检报告', style='report-head')
+    doc.add_paragraph('上海贝尔7750设备巡检报告', style='report-head')
+    doc.add_paragraph()
+    doc.add_paragraph()
+    today_obj = datetime.datetime.now()
+    today = '%d年%d月%d日' % (today_obj.year, today_obj.month, today_obj.day)
+    doc.add_paragraph(today, style='report-date')
+    doc.add_page_break()
+    doc.add_heading('巡检情况汇总', 4)
+    
+    for line in gz_list:
+        p_name = doc.add_paragraph(line[0], style='report-info')
+
+        if line[1]:
+            p_info = doc.add_paragraph(line[1], style='report-info')
+        if line[2]:
+            p_warn = doc.add_paragraph('注：' + line[2], style='report-normal')
+
+        if not line[1] and not line[2]:
+            print('not a line 1, 2')
+        doc.add_paragraph()
+        
+        set_color(p_name, (0, 0, 0))
+        set_color(p_info, (0, 0, 255))
+        set_color(p_warn, (255, 0, 255))
+
+    doc.add_heading('总结', 4)
+    doc.add_paragraph('1，为了保障%s移动城域网7750设备正常运行，请定期清理过滤网。' % city,
+        style='report-normal')
+
+    for item in gz_list:
+        if 'Temperature' in item:
+            doc.add_paragraph('2，板卡温度高建议清洗防尘网。',
+            style='report-normal')
+        break
+    
+    doc.save('%s移动巡检报告-%s.docx' % (city, today))
 
 date_path = time.strftime('%Y-%m-%d', time.localtime(time.time()))
 # while True:
@@ -78,7 +119,7 @@ city_list = os.listdir(date_path)
 for city in city_list:
     city_path = os.path.join(date_path,city)
     if  not os.path.isfile(city_path):
-        make_report(city_path)
+        make_report_tel(city_path)
 
 
 # doc = docx.Document()
